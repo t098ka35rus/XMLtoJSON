@@ -26,8 +26,8 @@ public class Main {
     }
 
     public static List<Employee> parseXML(String xmlFileString) {
-        String [] attributes = {"id","firstName","lastName","country","age"};
-        String [] [] params = new String[2][5];
+        String[] attributes = {"id", "firstName", "lastName", "country", "age"};
+        String[][] params = new String[2][5];
         List<Employee> employees = new ArrayList<>();
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -36,28 +36,27 @@ public class Main {
             for (int i = 0; i < attributes.length; i++) {
                 NodeList nodeList = document.getElementsByTagName(attributes[i]);
                 for (int j = 0; j < nodeList.getLength(); j++) {
-                                   params[j] [i] = nodeList.item(j).getTextContent();
+                    params[j][i] = nodeList.item(j).getTextContent();
                 }
 
             }
 
 
-            Employee e1 = new Employee(Long.parseLong(params[0][0]),params[0][1],params[0] [2],params[0] [3], Integer.parseInt(params[0][4]));
-            Employee e2 = new Employee(Long.parseLong(params[1][0]),params[1][1],params[1] [2],params[1] [3], Integer.parseInt(params[1][4]));
+            Employee e1 = new Employee(Long.parseLong(params[0][0]), params[0][1], params[0][2], params[0][3], Integer.parseInt(params[0][4]));
+            Employee e2 = new Employee(Long.parseLong(params[1][0]), params[1][1], params[1][2], params[1][3], Integer.parseInt(params[1][4]));
             employees.add(e1);
             employees.add(e2);
-
 
 
             return employees;
 
 
-        } catch (Exception e){
-        System.out.println(e.getMessage());
-    }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         return null;
 
-}
+    }
 
     public static String listToJson(List<Employee> list) {
         GsonBuilder gsonBuilder = new GsonBuilder();
