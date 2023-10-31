@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -19,37 +20,29 @@ public class Main {
         String xmlFileString = "/Users/timofejzabolotko/IdeaProjects/XMLtoJSON/data.xml";
         List<Employee> list = parseXML(xmlFileString);
         String s = listToJson(list);
-        System.out.println(s);
         writeString(s);
 
 
     }
 
     public static List<Employee> parseXML(String xmlFileString) {
-        String[] attributes = {"id", "firstName", "lastName", "country", "age"};
-        String[][] params = new String[2][5];
         List<Employee> employees = new ArrayList<>();
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document document = builder.parse(new File(xmlFileString));
-            for (int i = 0; i < attributes.length; i++) {
-                NodeList nodeList = document.getElementsByTagName(attributes[i]);
-                for (int j = 0; j < nodeList.getLength(); j++) {
-                    params[j][i] = nodeList.item(j).getTextContent();
-                }
-
+            NodeList list = document.getElementsByTagName("employee");
+            for (int i = 0; i < list.getLength(); i++) {
+                Element employee = (Element) list.item(i);
+                long id = Long.parseLong(employee.getElementsByTagName("id").item(0).getTextContent());
+                String firstName = employee.getElementsByTagName("firstName").item(0).getTextContent();
+                String lastName = employee.getElementsByTagName("lastName").item(0).getTextContent();
+                String country = employee.getElementsByTagName("country").item(0).getTextContent();
+                int age = Integer.parseInt(employee.getElementsByTagName("age").item(0).getTextContent());
+                employees.add(new Employee(id, firstName, lastName, country, age));
             }
 
-
-            Employee e1 = new Employee(Long.parseLong(params[0][0]), params[0][1], params[0][2], params[0][3], Integer.parseInt(params[0][4]));
-            Employee e2 = new Employee(Long.parseLong(params[1][0]), params[1][1], params[1][2], params[1][3], Integer.parseInt(params[1][4]));
-            employees.add(e1);
-            employees.add(e2);
-
-
             return employees;
-
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
